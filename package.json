@@ -1,0 +1,30 @@
+{
+  "name": "mini_project2",
+  "version": "1.0.0",
+  "description": "Hanghae99",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettify": "prettier --write *.js **/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spedi123/Mini_Project2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spedi123/Mini_Project2/issues"
+  },
+  "homepage": "https://github.com/spedi123/Mini_Project2#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.10"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}
