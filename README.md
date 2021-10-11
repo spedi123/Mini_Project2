@@ -1,5 +1,6 @@
 # Mini_Project2
-# 브랜치 생성을 위한 커밋 추후 삭제
-# 선웅 브렌치에서 최초 커밋
-# 2차 커밋
+## 댓글 기능 작업한 파일은 다음과 같다.
+# routers -> commentRouter.js 전체
+# schemas -> comment.js 전체
+# app.js 20,25번째 줄
 Hanghae99
