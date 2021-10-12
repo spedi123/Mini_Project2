@@ -1,10 +1,10 @@
 //실행 전에 터미널에 npm install youtube-node 를 실행해야 합니다
 //해당 npm 정보는 여기 링크에 있습니다. https://www.npmjs.com/package/youtube-node
 
-var fs = require('fs');
-var readline = require('readline');
-var {google} = require('googleapis');
-var OAuth2 = google.auth.OAuth2;
+// var fs = require('fs');
+// var readline = require('readline');
+// var {google} = require('googleapis');
+// var OAuth2 = google.auth.OAuth2;
 // const { getYoutube } = require("./youtube_controller");
 var Youtube = require('youtube-node');
 var youtube = new Youtube();
@@ -31,10 +31,10 @@ youtube.search(word, limit, function (err, result) { // 검색 실행
         var title = it["snippet"]["title"];
         var video_id = it["id"]["videoId"];
         var url = "https://www.youtube.com/watch?v=" + video_id;
-        // var thumbnails = it["thumbnails"]["default"]["url"];
+        // var thumbnails = it["thumbnails"]["default"]["url"]; 오류발생 부분-1
         console.log("제목 : " + title);
         console.log("URL : " + url);
         console.log("-----------");
-        // console.log("썸네일: " + thumbnails);
+        // console.log("썸네일: " + thumbnails); 오류발생 부분-2
     }
 });
