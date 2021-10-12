@@ -4,7 +4,7 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 게시글 작성 안성규
-router.post("/post", authMiddleware, async (req, res) => {
+router.post("/myPage/:postId", authMiddleware, async (req, res) => {
   console.log(req.body);
   const { title, userId, url, desc, date } = req.body;
 //   let postId = await Posts.find({}).sort("-postId").limit(1);
@@ -13,16 +13,21 @@ router.post("/post", authMiddleware, async (req, res) => {
 //   } else {
 //     postId = postId[0]["postId"] + 1;
 //   }
+  const youtubeId = url;
+  videoId=youtubeId.split('=')[1];
+  url = videoId;
   await Posts.create({ postId, title, userId, url, desc, date });
   res.send({ result: "success" });
 });
 
 // 게시글 조회 안성규
-router.get("/post", async (req, res) => {
+router.get("/main", async (req, res) => {
   try {
     const post = await Posts.find({}).sort("-date");
     console.log(post);
-    res.json({ post: post });
+    const youtubeId = post.url
+    thumbnailId = youtubeId.split('=')[1]
+    res.json({ post: post }, { thumbnailId: thumbnailId });
   } catch (err) {
     console.error(err);
     next(err);
