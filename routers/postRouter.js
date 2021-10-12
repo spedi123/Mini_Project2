@@ -4,19 +4,21 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 게시글 작성 안성규
-router.post("/myPage/:postId", authMiddleware, async (req, res) => {
+router.post("/myPage", authMiddleware, async (req, res) => {
   console.log(req.body);
-  const { title, userId, url, desc, date } = req.body;
-//   let postId = await Posts.find({}).sort("-postId").limit(1);
-//   if (postId.length == 0) {
-//     postId = 1;
-//   } else {
-//     postId = postId[0]["postId"] + 1;
-//   }
-  const youtubeId = url;
-  videoId=youtubeId.split('=')[1];
-  url = videoId;
-  await Posts.create({ postId, title, userId, url, desc, date });
+  const { title, userId, urlReceive, desc, date } = req.body;
+  // 고객에게 받은 url이 youtube.com이 포함되지 않으면 에러 메세지 발송
+  if (!urlReceive.includes("youtube.com")) {
+    res.status(400).send({
+        errorMessage: "유튜브 url을 입력해주세요!",
+    });
+    return;
+  }
+  // 고객에게 받은 url값으로 youtubeId 추출
+  const youtubeId = urlReceive;
+  const videoId=youtubeId.split('=')[1];
+  const url = videoId;
+  await Posts.create({ title, userId, url, desc, date });
   res.send({ result: "success" });
 });
 

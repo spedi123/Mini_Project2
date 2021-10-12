@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const postingSchema = new Schema({
-    postId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
+    // postId: {
+    //     type: Number,
+    //     required: true,
+    //     unique: true
+    // },
     title: {
         type: String,
     },
