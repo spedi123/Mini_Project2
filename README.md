@@ -6,13 +6,9 @@
 
 1. Developers
 - Backend (Node.js)
-박선웅
-안성규
-황유정
+박선웅, 안성규, 황유정
 - Frontend (React)
-김다원
-김덕현
-김효진
+김다원, 김덕현, 김효진
 
 
 2. 노션 설계 페이지 & WireFrame
