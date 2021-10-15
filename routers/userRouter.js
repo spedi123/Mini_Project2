@@ -66,7 +66,7 @@ router.post('/signIn', async (req, res) => {
     }
     
     //send token
-    const token = jwt.sign({ userObjectId: user.userObjectId }, 'artube-secret-key')
+    const token = jwt.sign({ userObjectId: user.userObjectId }, process.env.JWT_SECRET_KEY)
     res.send({ token })
 })
 
