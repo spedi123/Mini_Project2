@@ -9,14 +9,14 @@ router.post("/", authMiddleware, async (req, res, next) => {
         console.log(req.body);
         const { user } = res.locals
         const { title, youtube_url, desc, image_url, video_url } = req.body;
-        // const { user } = res.locals;
+
         if (!youtube_url.includes("youtube.com")) {
             res.status(400).send({
                 errorMessage: "유튜브 url을 입력해주세요!",
             });
             return;
         }
-        // 고객에게 받은 url값으로 youtubeId 추출
+        
         const postDate = new Date()
         let currentDate = postDate.toLocaleString()
         const newPost = await Posts.create({ title, userId: user.userId, youtube_url, image_url, video_url, desc, date: currentDate }); //userId 프론트랑 협의후 다시 입력해야 함.
