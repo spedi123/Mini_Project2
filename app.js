@@ -1,7 +1,12 @@
 const express = require('express')
 const app = express()
-const port = 3000
-//dotenv 추가해야 함! (userId, password, schemas/index의 db저장 되는 장소)
+
+// const port = 3000
+const port = process.env.port || 3000;
+
+// dotenv 모듈 
+const dotenv = require("dotenv")
+dotenv.config()
 
 // cors 연결, cors를 프론트와 연결하기 위해 오픈한 것
 const cors = require('cors')
