@@ -8,7 +8,6 @@ const commentSchema = new Schema({
     },
     postId: {
         type: String,
-        // type: mongoose.Types.ObjectId(),
     },
     commentDesc: {
         type: String,

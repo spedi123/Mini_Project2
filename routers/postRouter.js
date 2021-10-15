@@ -102,17 +102,17 @@ router.delete("/detail/:postId", authMiddleware, async (req, res) => {
   } 
   });
 
+
 // 게시글 조회 안성규
 router.get('/main', async (req, res) => {
     try {
-        const post = await Posts.find({}).sort('-date')
+        const post = await Posts.find({}).sort("-date")
         res.json({ post: post })
         // res.json({"result": "게시글 조회~"})
     } catch (err) {
         next(err)
     }
 })
-
 
 // 상세 페이지 황유정 <성공!>
 router.get('/detail/:postId', authMiddleware, async(req, res) => {
@@ -123,23 +123,12 @@ router.get('/detail/:postId', authMiddleware, async(req, res) => {
     } catch (err) {}
 })
 
-
-// 마이페이지 조회 황유정
-//authMiddleware 빼고 postman에 실험 중
-// router.get('/myPage/:userObjectId', async(req, res) =>{
-//     const { userObjectId } = req.params
-//     const myPage = await User.find({ userObjectId }).sort("-date");
-//     console.log(myPage)
-//     res.json({ 
-//         myPage: myPage })
-
-// })
 // 마이페이지 황유정
 router.get('/myPage/:userId', authMiddleware, async (req, res) => {
     try {
         const { userId } = req.params
-        const post = await Posts.find({ userId: userId }).sort("date");
-        res.json({ post: post })
+        const myPagePost = await Posts.find({ userId: userId }).sort("-date");
+        res.json({ myPagepost: myPagePost })
     } catch (err) {
         console.error(err)
         next(err)

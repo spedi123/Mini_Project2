@@ -49,7 +49,7 @@ router.get('/comment/:postId', async (req, res) => {
     res.json({ comment: comment }) //json형식으로 응답
 })
 
-//댓글 삭제 authmiddleware 삭제
+//댓글 삭제 
 router.delete('/comment/:commentId', authMiddleware, async (req, res) => {
     //미들웨어를 통해 유저 토큰 보유 여부 검증
     const{ commentId } = req.params
@@ -67,7 +67,7 @@ router.delete('/comment/:commentId', authMiddleware, async (req, res) => {
     }
 })
 
-//댓글 수정authMiddleware 삭제
+//댓글 수정
 router.put('/comment/:commentId', authMiddleware, async (req, res) => {
     //미들웨어를 통해 유저 토큰 보유 여부 검증
     const { commentId } = req.params
