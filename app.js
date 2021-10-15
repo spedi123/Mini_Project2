@@ -2,16 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.use(express.json())
-//option 1
 const cors = require('cors')
-// const corsOption = {
-//     origin: "*",
-//     credentials: true,
-// }
 app.use(cors());
-
-// const token = jwt.sign({test: true}, 'artube-secret-key')
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
