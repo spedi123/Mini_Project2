@@ -1,26 +1,47 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const postingSchema = new Schema({
+const mongoose = require('mongoose')
+const { Schema } = mongoose
+
+const postSchema = new Schema({
     // postId: {
-    //     type: Number,
+    //     type: String,
     //     required: true,
-    //     unique: true
     // },
+    userId: {
+        type: String,
+        required: true,
+    },
     title: {
         type: String,
+        required: true,
     },
-    userId: {
-        type: String
-    },
-    url: {
+    youtube_url: {
         type: String,
+        required: true,
     },
-    content: {
+    image_url: {
         type: String,
+        required: true,
+    },
+    video_url: {
+        type: String,
+        required: true,
     },
     date: {
-        type: Date
-    }
+        type: String,
+        required: true,
+    },
+    desc: {
+        type: String,
+        required: true,
+    },
 })
 
-module.exports = mongoose.model("Post", postingSchema)
+postSchema.virtual('postId').get(function () {
+    return this._id.toHexString()
+})
+
+postSchema.set('toJSON', {
+    virtuals: true,
+})
+
+module.exports = mongoose.model('Posts', postSchema)

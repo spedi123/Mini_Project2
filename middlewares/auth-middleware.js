@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Users = require('../schemas/user');
+const User = require('../schemas/user');
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
@@ -11,7 +11,6 @@ module.exports = (req, res, next) => {
   }
   
   const [tokenType, tokenValue] = authorization.split(' ');
-  console.log(tokenType, tokenValue)
   if (!tokenValue || tokenType !== 'Bearer') {
     res.status(401).send({
       errorMessage: '로그인 후 사용하세요',
@@ -20,11 +19,11 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const { userId } = jwt.verify(tokenValue, "peter-secret-key");
-    Users.findById(userId).then((user) => {
+    const { userObjectId } = jwt.verify(tokenValue, "artube-secret-key");
+    User.findById(userObjectId).then((user) => {
       res.locals.user = user;
       next();
-    });
+    }).catch(err=>console.log(err))
   } catch (err) {
     res.status(401).send({
       errorMessage: "로그인 후 이용 가능한 기능입니다.",

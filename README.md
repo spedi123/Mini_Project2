@@ -1,2 +1,2 @@
-# Mini_Project2
+# Mini_Project2 - eujeong's branch
 Hanghae99

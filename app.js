@@ -1,50 +1,47 @@
-const express = require("express");
-const app = express();
-const port = 3000;
+const express = require('express')
+const app = express()
+const port = 3000
 
-const connect = require("./schemas");
-connect();
+app.use(express.json())
+//option 1
+const cors = require('cors')
+// const corsOption = {
+//     origin: "*",
+//     credentials: true,
+// }
+app.use(cors());
 
-const postingRouter = require("./routers/postRouter");
-const userRouter = require("./routers/userRouter");
-const commentRouter = require("./routers/commentRouter");
+// const token = jwt.sign({test: true}, 'artube-secret-key')
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-// 라우터 연결
-app.use("/api", [postingRouter]);
-app.use("/api", [userRouter]);
-app.use("/api", [commentRouter]);
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+// schemas와 연결
+const connect = require('./schemas')
+connect()
+
+//api 설정
+const postRouters = require('./routers/postRouter')
+const userRouters = require('./routers/userRouter')
+const commentRouters = require('./routers/commentRouter')
+
+app.use('/user', [userRouters])
+app.use('/post', [postRouters])
+app.use('/comment', [commentRouters])
 
 
-app.set("views", __dirname + "/views");
-app.set("view engine", "ejs");
-// 메인페이지
-app.get("/", (req, res) => {
-  res.render("index");
-});
-// // 게시글 작성페이지
-// app.get("/posting", (req, res) => {
-//   res.render("posting");
-// });
-// // 게시글 자세히보기(댓글포함 / 댓글수정 및 삭제기능 포함)
-// app.get("/detail", (req, res) => {
-//   res.render("detail");
-// });
-// // 게시글 수정페이지
-// app.get("/edit", (req, res) => {
-//   res.render("edit");
-// });
-// // 로그인 페이지
-// app.get("/login", (req, res) => {
-//   res.render("login");
-// });
-// // 회원가입 페이지
-// app.get("/register", (req, res) => {
-//   res.render("register");
-// });
+//ejs 템플릿 엔진을 위한 것
+// app.set('views', __dirname + '/views')
+// app.set('view engine', 'ejs')
+
+
+// app.get('/', (req, res) => { res.render('main')})
+// app.get('/detail', (req, res) => { res.render('detail')})
+// app.get('/myPage', (req, res) => { res.render('myPage')})
+// app.get('/signIn', (req, res) => { res.render('signIn')})
+// app.get('/signUp', (req, res) => { res.render('signUp')})
+
 
 app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`);
-});
-
+    console.log(`listening at http://localhost:${port}`)
+})

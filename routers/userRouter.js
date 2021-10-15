@@ -1,86 +1,79 @@
-const express = require("express");
-const Users = require("../schemas/user");
-const Joi = require("joi");
-const router = express.Router();
-const jwt = require("jsonwebtoken");
-const authMiddleware = require("../middlewares/auth-middleware");
+const express = require('express')
+const jwt = require('jsonwebtoken')
+const User = require('../schemas/user')
+const router = express.Router()
+const authMiddleware = require('../middlewares/auth-middleware')
 
-// 회원가입
-const postUsersSchema = Joi.object({
-  userId: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,20}$")),
-  password: Joi.string().required().min(4),
-  confirmPassword: Joi.string().required(),
-});
+// 회원가입 API - POST
+router.post('/signUp', async (req, res, next) => {
+    try {
+        const { userId, password, confirmPassword } = req.body
+        const existsUsers = await User.findOne({ userId })
 
-router.post("/signUp", async (req, res) => {
-  try {
-    const { userId, password, confirmPassword } =
-      await postUsersSchema.validateAsync(req.body);
+        console.log(userId, password)
 
-    if (password !== confirmPassword) {
-      res.status(400).send({
-        errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
-      });
-    } else if (password.includes(userId)) {
-      res.status(400).send({
-        errorMessage: "비밀번호에 아이디를 포함하지 말아주세요.",
-      });
-      return;
+        const re_nickname = /^[a-zA-Z0-9]{3,255}$/
+        const re_password = /^[a-zA-Z0-9]{4,255}$/
+
+        if (userId.search(re_nickname) == -1) {
+            return res.status(412).send({
+                errorMessage: 'ID의 형식이 일치하지 않습니다.',
+            })
+        } else if (password.search(re_password) == -1) {
+            return res.status(400).send({
+                errorMessage: '패스워드의 형식이 일치하지 않습니다.',
+            })
+        } else if (password.includes(userId)) {
+            return res.status(400).send({
+                errorMessage: '비밀번호에 아이디가 포함되어있습니다."',
+            })
+        } else if (password !== confirmPassword) {
+            return res.status(400).send({
+                errorMessage: '패스워드가 패스워드 확인란과 다릅니다.',
+            })
+        } else if (existsUsers) {
+            return res.status(400).send({
+                errorMessage: '닉네임을 이미 사용중입니다.',
+            })
+        }
+
+        const user = new User({ userId, password })
+        await user.save()
+
+        res.status(201).send({ result : "sucess"})
+    } catch (err) {
+        next(err)
     }
+})
 
-    const existsUsers = await Users.findOne({
-      $or: [{ userId }],
-    });
-    if (existsUsers) {
-      res.status(400).send({
-        errorMessage: "이메일 또는 닉네임이 이미 사용중입니다.",
-      });
-      return;
+//로그인 API - POST
+router.post('/signIn', async (req, res) => {
+    const { userId, password } = req.body
+
+    console.log('sign In', userId, password)
+
+    const user = await User.findOne({ userId })
+
+    //만약 user가 없거나
+    //password가, 찾은 nickname의 password와 일치하지 않는다면
+    //에러메세지를 보낸다
+    if (!user || password !== user.password) {
+        res.status(400).send({
+            //일부러 error message를 모호하게 말해준다.
+            errorMessage: '닉네임 또는 패스워드를 확인해주세요.',
+        })
+        return
     }
+    //send token
+    const token = jwt.sign({ userObjectId: user.userObjectId }, 'artube-secret-key')
+    res.send({ token })
+})
 
-    const user = new Users({ userId, password });
-    await user.save();
-
-    res.status(201).send({});
-  } catch (error) {
-    res.status(400).send({
-      errorMessage: "요청한 데이터 형식이 올바르지 않습니다.",
+router.get("/me", authMiddleware, async (req, res) => {
+    const { user } = res.locals;
+    res.send({
+      user,
     });
-  }
-});
-
-// 로그인
-
-const postAuthSchema = Joi.object({
-  userId: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")),
-  password: Joi.string().required().min(4),
-});
-
-router.post("/signIn", async (req, res) => {
-  try {
-    const { userId, password } = await postAuthSchema.validateAsync(req.body);
-    const user = await Users.findOne({ userId, password }).exec();
-    if (!user) {
-      res
-        .status(400)
-        .send({ errorMessage: "닉네임 또는 패스워드가 잘못됐습니다." });
-      return;
-    }
-    const token = jwt.sign({ userId: user.userId }, "peter-secret-key");
-    console.log(token);
-    res.send({ token });
-  } catch (error) {
-    res.status(400).send({
-      errorMessage: "요청한 데이터 형식이 올바르지 않습니다.",
-    });
-  }
-});
-
-router.get("/user/me", authMiddleware, async (req, res) => {
-  const { user } = res.locals;
-  res.send({
-    user,
-  });
 });
 
 module.exports = router;
