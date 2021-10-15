@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const connect = () => {
     mongoose
+        // 이 부분을 env로 가려놔야 함 
         // .connect('mongodb://localhost:27017/admin', {
         .connect('mongodb://localhost:27017/myArtube', {
             useNewUrlParser: true,
