@@ -77,34 +77,13 @@ router.get("/me", authMiddleware, async (req, res) => {
 });
 
 
-// 프로필 정보 생성
-// router.post("/me", authMiddleware, async(req, res)=> {
-
-//     const { user } = res.locals
-//     const { userIntro, userPic } = req.body;
-
-//     const myProfile = await User.create({ userId: user.userId, password: user.password, userIntro, userPic }); 
-//     res.send({ 
-//         result: "success", 
-//         myProfile
-//     });
-
-// }) 
-
-
 //프로필 정보 수정
 router.put('/me', authMiddleware, async (req, res, next) => {
     try {
-        // const { userObjectId } = req.params
         const { user } = res.locals
 
         const userDetail = await User.findById( user._id )
-        console.log(userDetail)
-
-        // const current_user = res.locals.user.userId
         const current_user = user.userId
-
-        console.log(current_user)
 
         if (userDetail.userId !== current_user) {
             res.status(403).send({
@@ -129,13 +108,9 @@ router.put('/me', authMiddleware, async (req, res, next) => {
 // 프로필 정보 삭제
 router.delete("/me", authMiddleware, async (req, res, next) => {
     try {
-        // const { userObjectId } = req.params
         const { user } = res.locals
 
         const userDetail = await User.findById( user._id )
-        console.log(userDetail)
-
-        // const current_user = res.locals.user.userId
         const current_user = user.userId
 
         console.log(current_user)
@@ -146,8 +121,6 @@ router.delete("/me", authMiddleware, async (req, res, next) => {
             })
             return
         }
-
-        // const { userIntro, userPic } = req.body
         await User.findOneAndUpdate(
             { userId: user.userId },
             { $set: { userIntro : null, userPic : null }}

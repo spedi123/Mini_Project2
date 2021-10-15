@@ -2,9 +2,8 @@ const express = require('express')
 const Comment = require('../schemas/comment')
 const Posts = require('../schemas/post')
 const router = express.Router()
-// var postId = "6167aee0048fa5d726a7bfbe"
 const authMiddleware = require('../middlewares/auth-middleware')
-//authMiddleware 뺌~
+
 
 // 댓글작성
 router.post('/comment', authMiddleware, async (req, res) => {
@@ -15,11 +14,10 @@ router.post('/comment', authMiddleware, async (req, res) => {
       commentId = recentComment[0]['commentId']+1
     }
 
-    const { commentDesc, postId, commentUserId } = req.body; // 프런트와 commmentUserId확인하기
-    // const { postId } = req.params;
+    const { commentDesc, postId, commentUserId } = req.body; 
     const commentDate = new Date()
     let currentDate = commentDate.toLocaleString()
-    // const commentDate = new Date().format("yyyy-MM-dd a/p hh:mm:ss");
+
     // post id가 틀렸을 시 에러 출력
     isExits = await Posts.findOne({ postId : postId });
     if (!isExits) {
@@ -27,7 +25,7 @@ router.post('/comment', authMiddleware, async (req, res) => {
         errorMessage: '존재하지 않는 게시물입니다.'
       });
       return;
-      // case2: content가 존재하지 않을 시 에러 출력
+      // content가 존재하지 않을 시 에러 출력
     } else if (commentDesc == "") {
       res.status(403).send({
         errorMessage: '내용을 입력해주세요.'
@@ -43,7 +41,6 @@ router.post('/comment', authMiddleware, async (req, res) => {
 
 //댓글 조회
 router.get('/comment/:postId', async (req, res) => {
-    //next()는 어디갔지???
     const { postId } = req.params //postId값으로 해당 게시물 안에 있는 댓글 찾기
     const comment = await Comment.find({ postId }).sort('-commentId') //postId로 찾아온 댓글을 내림차순으로 정렬
     res.json({ comment: comment }) //json형식으로 응답
