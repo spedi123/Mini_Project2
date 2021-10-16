@@ -25,8 +25,8 @@ https://www.notion.so/dawon-ella-kim/1-Artube-bee37ad5fbbe4663a24056ea7f85580a
 
 
 ## 4. 실행화면
-[![Video Label](http://img.youtube.com/vi/dmZZtIEX5YM/0.jpg)](https://youtu.be/dmZZtIEX5YM)
-- https://youtu.be/dmZZtIEX5YM
+[![Video Label](http://img.youtube.com/vi/qYR1lIZq4CY/0.jpg)](https://www.youtube.com/watch?v=qYR1lIZq4CY)
+- https://www.youtube.com/watch?v=qYR1lIZq4CY
 
 
 
