@@ -48,37 +48,20 @@ https://www.notion.so/dawon-ella-kim/1-Artube-bee37ad5fbbe4663a24056ea7f85580a
    - 권한인증을 통하여, 자신의 리뷰글을 삭제가능하며, 다른 유저의 리뷰글은 삭제가 불가능합니다.
    
 ## 6. 해결한 문제 정리해보기
-- `frontend`
-   - `login.html`
-      - 문제, 회원가입 시 id 중복확인을 통과 후, 중복된 id 입력 후 회원가입이 되는 문제
-         - 해결, onChange 이벤트를 이용하여 onChange 시 class를 'is-danger'로 자동변경과 안내 문구 출력
-   - `chargeList.html`
-      - 문제 1, 이미지가 없을 경우 견본이미지 9장 중 1장을 보이게 해야하는 문제
-         - 해결, janja의 if문을 통하여 img tag를 교체하고, src 속성도 jinja를 이용하여 동적으로 연결
-      - 문제 2, 견본이미지 9개 종류중 한 개만 나오는 문제
-         - 해결, for문을 통해 idx 변수를 만들고 이 idx로 `default_charge{idx}` 처럼 여러 종류의 견본이미지를 불러오도록 해결
-      - 문제 3, jinja 템플릿은 파이썬 방식의 for문이며, iterator의 사용이 불가능하며, 최신버전의 jinja는 idx = idx + 1 사용이 불가능하다.
-         - 해결, idx를 list로 선언하고, loop마다 append(1)후, idx의 `{{idx|length}}`를 통해 idx를 가져옴
-         - 참고, https://stackoverflow.com/questions/1465249/get-lengths-of-a-list-in-a-jinja2-template
-      - 문제 4, 리스트의 사진 클릭시 `charge_detail.html`로 `routing` 기능을 넣으며, 그 항목의 `chargeId`를 주어야 하는 문제
-         - 해결 1, for문을 통하여 각 충전소 element에 id 값을 jinja로 설정 후 method의 파라미터에 `this.id`로 id를 보내주어 해결
-            -참고, https://stackoverflow.com/questions/23655009/how-to-set-the-id-attribute-of-a-html-element-dynamically-with-angularjs-1-x
-         - 해결 2, 간단히 method의 파라미터에 jinja를 통하여 id값을 보내주어 해결
-   - `charge_detail.html`
-      - 문제 1, 리뷰 수정 시 modal 창을 통해 입력, modal 창을 열때 그 리뷰글의 `리뷰id` 값을 저장하여 `backend`로 보내야하는 문제
-         - 해결 1,  js를 통하여 modal 클릭시 변수에 id 값을 저장하도록 설정, 모든 리뷰 글은 modal을 클릭 해야하는 전제조건이 있으므로 가능하다.
 - `backend`
-   - 문제 1, mongodb의 id 값은 `ObjectId('12312123')` 형식이며 이를 전처리하여 `frontend`로 보내야 하는 문제
-      - 해결, str() 함수를 통하여 해결, 데이터가 배열인 경우에는 새로운 파이썬 리스트를 선언하고 데이터를 저장하여 보내도록 해결
-      - 참고, https://stackoverflow.com/questions/11280382/object-is-not-json-serializable
-   - 문제 2, mongodb의 insert, find, delete, update 등 db 조작 중 Exception 처리
-      - 해결, `Exception e` 문구를 통해 해결
-      - 참고, https://stackoverflow.com/questions/60066390/pymongo-insert-one-exception-error-handling
-   - 문제 3, review 글의 수정 삭제 시 내 review글만 삭제, 수정하도록 제한해야하는 문제
-      - 해결, 수정, 삭제 실행 전 `권한 체크` 함수를 만들고 review 작성자의 id와 토큰을 통한 로그인 id를 비교하여 권한을 체크할 수 있도록 수정
-   - 문제 4, 지역 검색시 find가 아닌 like query문을 사용해야하는 문제
-      - 해결, 구글링을 통하여 like 함수 작성
-      - 참고, https://stackoverflow.com/questions/10018730/how-use-sql-like-in-pymongo
-   - 문제 5, 충전소 리스트를 db에서 불러올 때 페이징네이션으로 잘라서 가져와야하는 문제
-      - 해결, 구글링을 통하여 함수 작성
-      - 참고, https://journeytosth.tistory.com/31
+   -- 개인 프로필 정보를 삭제할 때, 전체 User전체 db를 지우지 않고,  특정 db값만 지우고 싶으면 어떡해야 할까?
+    - User.deleteOne() 을 사용하면 User 정보 안에 있는 _id, userId, password, userPic, userIntro가 전부 지워진다.
+    - 그래서 userPic과 userIntro를 지우기 위해서, findOneAndUpdate( )를 쓰고, userPic 과 userIntro에 null값을 부여했다.
+        
+        ```jsx
+        await User.findOneAndUpdate(
+                    { userId: user.userId },
+                    { $set: { userIntro : null, userPic : null }}
+        )
+        ```
+        
+- 개인 프로필 정보를 조회하기 위해서, back에서 front로 user 정보를 전부 보내는데, 이것이 보안상 위험한데 어떡해 해결 하실 건가요?
+    - 비밀번호를 bcrypt를 이용해서 암호화를 한 후, 넘겨줘야 한다.
+    - 저희 팀은 bcrypt를 이용하지 않았는데, 앞으로 보안을 탄탄하게 하려면 이용을 해야겠다.
+- BackEnd에서 작업을 하다가 정해진 API 설계 그대로 못 하고, 중간에 url을 바꾸게 되는 경우가 생기는데 그때마다 서로 맞추는 것보다 더 효율적인 방법이 있을까요?
+    - swagger를 쓰면 된다! → 저희 팀은 안 쓰긴 했는데, 다른 팀이 쓴 것을 보니 front, back에 둘 다 좋은 것 같다.
