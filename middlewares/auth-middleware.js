@@ -19,9 +19,11 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const { userObjectId } = jwt.verify(tokenValue, "artube-secret-key");
+    const { userObjectId } = jwt.verify(tokenValue, process.env.JWT_SECRET_KEY);
+    console.log("2", userObjectId)
     User.findById(userObjectId).then((user) => {
       res.locals.user = user;
+      console.log("1", user)
       next();
     }).catch(err=>console.log(err))
   } catch (err) {
