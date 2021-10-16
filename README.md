@@ -48,7 +48,7 @@ https://www.notion.so/dawon-ella-kim/1-Artube-bee37ad5fbbe4663a24056ea7f85580a
    - 권한인증을 통하여, 자신의 리뷰글을 삭제가능하며, 다른 유저의 리뷰글은 삭제가 불가능합니다.
    
 ## 6. 해결한 문제 정리해보기
-- `backend`
+`backend`
  - 개인 프로필 정보를 삭제할 때, 전체 User전체 db를 지우지 않고,  특정 db값만 지우고 싶으면 어떡해야 할까?
     - User.deleteOne() 을 사용하면 User 정보 안에 있는 _id, userId, password, userPic, userIntro가 전부 지워진다.
     - 그래서 userPic과 userIntro를 지우기 위해서, findOneAndUpdate( )를 쓰고, userPic 과 userIntro에 null값을 부여했다.
